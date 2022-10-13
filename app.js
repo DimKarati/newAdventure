@@ -5,7 +5,9 @@ const mongoose = require('mongoose');
 const Place = require('./models/place');
 
 //Connecting to MongoDB Cluster
-mongoose.connect('mongodb+srv://newAdventuredb:zOVtF2Kyh2pbUyZ5@cluster0.mqdwegs.mongodb.net/new-Adventure');
+mongoose.connect('mongodb+srv://newAdventuredb:zOVtF2Kyh2pbUyZ5@cluster0.mqdwegs.mongodb.net/?retryWrites=true&w=majority');
+
+
 
 //Checking if the connection is successfull
 const db = mongoose.connection;
