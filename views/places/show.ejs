@@ -9,7 +9,29 @@
 
 <body>
     <h1>This is the show page</h1>
+
+            <h2><%= place.title %></h2>
+            <h3><%= place.location %></h3>
+
+
+            <p>
+                <a href="/newAdventures/<%= place._id%>/edit">Edit your post</a>
+            </p>
+
+
+            <p>
+                <form action="/places/<%=place._id%>?_method=DELETE" method="POST">
+                    <button>Delete</button>
+                </form>
+            </p>
+
+
+
+
+
+            <footer>
+                <a href="/newAdventures">All adventures</a>
+            </footer>
+    
 </body>
-
-
 </html>

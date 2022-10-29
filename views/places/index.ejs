@@ -10,9 +10,11 @@
 <body>
     <h1>All posts</h1>
 
+    <a href="/newAdventures/new">Post your adventure</a>
+
     <ul>
         <% for (let place of places) {%>
-            <li><%= place.title %></li>
+            <a href="/newAdventures/<%=place._id%>"><li><%= place.title %></li></a>
         <% } %>
     </ul>
 

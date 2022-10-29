@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Edit Adventure</title>
+</head>
+
+<body>
+
+    <h1>Edit your Adventure</h1>
+
+    <form action="/places/<%=place._id%>?_method=PUT" method="POST">
+        <div>
+            <label for="title">Title</label>
+            <input type="text" id="title" name="place[title]" value="<%= place.title %>">
+        </div>
+        <div>
+            <label for="title">Location</label>
+            <input type="text" id="location" name="place[location]" value="<%= place.location %>">
+        </div>
+        <button>Update Adventure</button>
+
+        <a href="/newAdventures/<% place._id%>">Back to Adventure</a>
+    </form>
+
+</body>
+
+
+</html>
