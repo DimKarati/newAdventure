@@ -2,14 +2,14 @@
 <div class="row">
     <h1 class="text-center"> New Adventure</h1>
     <div class="col-6 offset-3">
-        <form action="/places" method="POST">
+        <form action="/places" method="POST" novalidate class="validate-form">
             <div class="mb-3">
                 <label class="form-label" for="title">Title</label>
-                <input class="form-control" type="text" id="title" name="place[title]">
+                <input class="form-control" type="text" id="title" name="place[title]" required>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="title">Location</label>
-                <input class="form-control" type="text" id="location" name="place[location]">
+                <input class="form-control" type="text" id="location" name="place[location]" required>
             </div>
             <!-- <div class="mb-3">
                 <label class="form-label" for="image">Image URL</label>
@@ -22,3 +22,24 @@
         </form>
     </div>
 </div>
+
+<script>
+    (() => {
+  'use strict'
+
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  const forms = document.querySelectorAll('.validate-form')
+
+  // Loop over them and prevent submission
+  Array.from(forms).forEach(form => {
+    form.addEventListener('submit', event => {
+      if (!form.checkValidity()) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+
+      form.classList.add('was-validated')
+    }, false)
+  })
+})()
+</script>
