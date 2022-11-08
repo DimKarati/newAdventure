@@ -5,9 +5,10 @@ const mongoose = require('mongoose');
 //Method Override so we can use edit and delete posts
 const methodOverride = require('method-override');
 const Place = require('./models/place');
-const { adventureSchema } = require('./schemas.js');
+const { adventureSchema, reviewSchema } = require('./schemas.js');
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
+const Review = require('./models/review');
 //Tool for layout
 const ejsMate = require('ejs-mate');
 
@@ -30,6 +31,7 @@ app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+// validates the input when creating a post
 const validateAdventure = (req, res, next) => {
     const { error } = adventureSchema.validate(req.body);
     if (error) {
@@ -40,6 +42,20 @@ const validateAdventure = (req, res, next) => {
         next();
     }
 }
+
+// validates the input when creating a review
+const validateReview = (req, res, next) => {
+    const { error } = reviewSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',')
+        throw new ExpressError(msg, 400)
+    }
+    else {
+        next();
+    }
+}
+
+
 //Parse the body with express
 app.use(express.urlencoded({extended: true}));
 //Use method override to be able to use requests like delete and edit
@@ -76,7 +92,7 @@ app.post('/places', validateAdventure, catchAsync(async (req, res, next) => {
 
 //Using this route takes us to a specific post
 app.get('/newAdventures/:id', catchAsync(async (req, res, next) => {
-    const place = await Place.findById(req.params.id)
+    const place = await Place.findById(req.params.id).populate('reviews');
     res.render('places/show', {place});
 }));
 
@@ -105,6 +121,29 @@ app.delete('/places/:id', catchAsync(async (req,res, next) => {
     //Reditect to the posts
     res.redirect('/newAdventures');
     
+}))
+
+// create and post a review to a specific place
+app.post('/places/:id/reviews', validateReview, catchAsync(async (req, res, next) => {
+    const place = await Place.findById(req.params.id);
+    const review = new Review(req.body.review);
+    place.reviews.push(review);
+    await review.save();
+    await place.save();
+    res.redirect(`/newAdventures/${place._id}`);
+}))
+
+// delete a review
+app.delete('/places/:id/reviews/:reviewID', catchAsync(async (req, res, next) => {
+    const { id, reviewId } = req.params;
+    //await Place.findByIdAndUpdate(id, {$pull: {reviews: reviewId}});
+    //await Review.findByIdAndDelete(reviewId);
+    //res.redirect(`/newAdventures/${id}`);
+    const place = await Place.findById(req.params.id);
+    console.log(req.params);
+    console.log(id);
+    console.log(reviewId);
+    res.send("works");
 }))
 
 app.all('*', (req, res, next) => {
