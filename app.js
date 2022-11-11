@@ -135,15 +135,10 @@ app.post('/places/:id/reviews', validateReview, catchAsync(async (req, res, next
 
 // delete a review
 app.delete('/places/:id/reviews/:reviewID', catchAsync(async (req, res, next) => {
-    const { id, reviewId } = req.params;
-    //await Place.findByIdAndUpdate(id, {$pull: {reviews: reviewId}});
-    //await Review.findByIdAndDelete(reviewId);
-    //res.redirect(`/newAdventures/${id}`);
-    const place = await Place.findById(req.params.id);
-    console.log(req.params);
-    console.log(id);
-    console.log(reviewId);
-    res.send("works");
+    const reviewID = req.params['reviewID'];
+    await Place.findByIdAndUpdate(req.params.id, {$pull: {reviews: reviewID}});
+    await Review.findByIdAndDelete(reviewID);
+    res.redirect(`/newAdventures/${req.params.id}`);
 }))
 
 app.all('*', (req, res, next) => {
