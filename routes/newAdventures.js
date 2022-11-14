@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
+const { isLoggedIn } = require('../middleware');
 
 const Place = require('../models/place');
 
@@ -11,7 +12,7 @@ router.get('/', catchAsync(async (req, res, next) => {
 }));
 
 //Get the form to post a new place
-router.get('/new', (req, res) => {
+router.get('/new', isLoggedIn, (req, res) => {
     res.render('places/new');
 });
 
@@ -27,7 +28,7 @@ router.get('/:id', catchAsync(async (req, res, next) => {
 }));
 
 //Get the edit form
-router.get('/:id/edit', catchAsync(async (req,res, next) =>{
+router.get('/:id/edit', isLoggedIn, catchAsync(async (req,res, next) =>{
     const place = await Place.findById(req.params.id)
     if(!place)
     {

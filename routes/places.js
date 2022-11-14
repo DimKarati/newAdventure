@@ -2,6 +2,7 @@
  const router = express.Router();
  const catchAsync = require('../utils/catchAsync');
  const { adventureSchema } = require('../schemas.js');
+ const { isLoggedIn } = require('../middleware');
 
  const ExpressError = require('../utils/ExpressError');
  const Place = require('../models/place');
@@ -20,7 +21,7 @@ const validateAdventure = (req, res, next) => {
 }
 
  //Send a post request to add this new place to the database
-router.post('/', validateAdventure, catchAsync(async (req, res, next) => {
+router.post('/', isLoggedIn, validateAdventure, catchAsync(async (req, res, next) => {
     const place = new Place(req.body.place);
     await place.save();
     req.flash('success', 'Successfully made a new post!')
@@ -28,7 +29,7 @@ router.post('/', validateAdventure, catchAsync(async (req, res, next) => {
 }));
 
 //Update the post using put request
-router.put('/:id', validateAdventure, catchAsync(async (req,res, next) => {
+router.put('/:id', isLoggedIn, validateAdventure, catchAsync(async (req,res, next) => {
     //Get the id of the post from the request
     const {id} = req.params;
     //Find the post given the id and update it
@@ -39,7 +40,7 @@ router.put('/:id', validateAdventure, catchAsync(async (req,res, next) => {
 }));
 
 //Delete a post
-router.delete('/:id', catchAsync(async (req,res, next) => {
+router.delete('/:id', isLoggedIn, catchAsync(async (req,res, next) => {
     //Get the id of the post from the request
     const {id} = req.params;
     //Find the post given the id and delete it

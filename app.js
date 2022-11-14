@@ -11,11 +11,16 @@ const ejsMate = require('ejs-mate');
 const session = require('express-session');
 //Require Flash
 const flash = require('connect-flash');
+//Stategies for authentication
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const User = require('./models/user');
 
 //Require Routing
-const newAdventures = require('./routes/newAdventures.js');
-const places = require('./routes/places.js');
-const reviews = require('./routes/reviews');
+const userRoutes = require('./routes/users');
+const newAdventuresRoutes = require('./routes/newAdventures.js');
+const placesRoutes = require('./routes/places.js');
+const reviewsRoutes = require('./routes/reviews');
 
 //Connecting to MongoDB Cluster
 mongoose.connect('mongodb+srv://newAdventuredb:zOVtF2Kyh2pbUyZ5@cluster0.mqdwegs.mongodb.net/?retryWrites=true&w=majority');
@@ -54,19 +59,31 @@ const sessionConfig = {
 app.use(session(sessionConfig))
 app.use(flash());
 
+app.use(passport.initialize());
+app.use(passport.session());
+//Use LocalStrategy located in user model (called authenticate - provided method)
+passport.use(new LocalStrategy(User.authenticate()));
+//Stores and unstores user in the session
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 //Flash middleware
 app.use((req, res, next) => {
+    console.log(req.session);
+    res.locals.currentUser = req.user;
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
     next();
 })
 
+//Take the routes for users
+app.use('/', userRoutes);
 //Take the routes for all the newAdventures
-app.use('/newAdventures', newAdventures);
+app.use('/newAdventures', newAdventuresRoutes);
 //Take the routes for all the places
-app.use('/places', places);
+app.use('/places', placesRoutes);
 //Take the routes for the reviews
-app.use('/places/:id/reviews', reviews);
+app.use('/places/:id/reviews', reviewsRoutes);
 
 //This is the home page
 app.get('/', (req, res) => {
@@ -74,8 +91,8 @@ app.get('/', (req, res) => {
 });
 
 //This is the sign up page
-app.get('/signup', (req, res) => {
-    res.render('signup');
+app.get('/register', (req, res) => {
+    res.render('register');
 });
 
 app.all('*', (req, res, next) => {
