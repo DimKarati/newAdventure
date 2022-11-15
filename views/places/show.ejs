@@ -9,16 +9,20 @@
             </div>
             <ul class="list-group list-group-flush">
               <li class="list-group-item"><%= place.location %></li>
+              <li class="list-group-item">Submitted by <%= place.author.username %></li>
             </ul>
+            <% if( currentUser && place.author.equals(currentUser._id)) {%>
             <div class="card-body">
                 <a class="card-link btn btn-success" href="/newAdventures/<%= place._id%>/edit">Edit your post</a>
                 <form class="d-inline" action="/places/<%=place._id%>?_method=DELETE" method="POST">
                     <button class="btn btn-danger">Delete</button>
                 </form>
             </div>
+            <% } %>
           </div>
     </div>
     <div class="col-6">
+      <% if(currentUser) { %>
       <h3>Leave a Review</h3>
           <form action="/places/<%=place._id%>/reviews" method="POST" class="mb-3 validate-form" novalidate> 
             <div class="mb-3">
@@ -31,14 +35,18 @@
             </div>
             <button class="btn btn-success">Submit</button>
           </form>
+          <% } %>
           <% for(let review of place.reviews) { %>
           <div class="card mb-3">
             <div class="card-body">
               <h5 class="card-title">Rating: <%= review.rating %></h5>
+              <h6 class="card-subtitle mb-2 text-muted">By <%= review.author.username %></h6>
               <p class="card-text">Review: <%= review.body %></p>
+              <% if( currentUser && review.author.equals(currentUser._id)) {%>
               <form action="/places/<%=place._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">
                 <button class="btn btn-sm btn-danger">Delete</button>
               </form>
+              <% } %>
             </div>
           </div>
           <% } %>

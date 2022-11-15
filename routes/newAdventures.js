@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
-const { isLoggedIn } = require('../middleware');
+const { isLoggedIn, isAuthor, validateAdventure } = require('../middleware');
 
 const Place = require('../models/place');
 
@@ -18,7 +18,13 @@ router.get('/new', isLoggedIn, (req, res) => {
 
 //Using this route takes us to a specific post
 router.get('/:id', catchAsync(async (req, res, next) => {
-    const place = await Place.findById(req.params.id).populate('reviews');
+    const place = await Place.findById(req.params.id).populate({
+        path:'reviews',
+        populate: {
+            path: 'author' // populates the author of each of the reviews on the post
+        }
+    }).populate('author'); // populates the author of the post
+    console.log(place);
     if(!place)
     {
         req.flash('error', 'Cannot find that post!')
@@ -28,8 +34,9 @@ router.get('/:id', catchAsync(async (req, res, next) => {
 }));
 
 //Get the edit form
-router.get('/:id/edit', isLoggedIn, catchAsync(async (req,res, next) =>{
-    const place = await Place.findById(req.params.id)
+router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(async (req,res, next) =>{
+    const { id } = req.params;
+    const place = await Place.findById(id)
     if(!place)
     {
         req.flash('error', 'Cannot find that post to edit!')
