@@ -2,47 +2,19 @@ const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const { isLoggedIn, isAuthor, validateAdventure } = require('../middleware');
-
+const newAdventures = require('../controllers/newAdventures');
 const Place = require('../models/place');
 
 //Using this route we land into the different posts users have posted
-router.get('/', catchAsync(async (req, res, next) => {
-    const places = await Place.find({});
-    res.render('places/index', { places })
-}));
+router.get('/', catchAsync(newAdventures.index));
 
 //Get the form to post a new place
-router.get('/new', isLoggedIn, (req, res) => {
-    res.render('places/new');
-});
+router.get('/new', isLoggedIn, newAdventures.renderNewForm);
 
 //Using this route takes us to a specific post
-router.get('/:id', catchAsync(async (req, res, next) => {
-    const place = await Place.findById(req.params.id).populate({
-        path:'reviews',
-        populate: {
-            path: 'author' // populates the author of each of the reviews on the post
-        }
-    }).populate('author'); // populates the author of the post
-    console.log(place);
-    if(!place)
-    {
-        req.flash('error', 'Cannot find that post!')
-        return res.redirect('/newAdventures');
-    }
-    res.render('places/show', {place});
-}));
+router.get('/:id', catchAsync(newAdventures.showAdventure));
 
 //Get the edit form
-router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(async (req,res, next) =>{
-    const { id } = req.params;
-    const place = await Place.findById(id)
-    if(!place)
-    {
-        req.flash('error', 'Cannot find that post to edit!')
-        return res.redirect('/newAdventures');
-    }
-    res.render('places/edit', {place});
-}));
+router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(newAdventures.renderEditForm));
 
 module.exports = router;
