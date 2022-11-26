@@ -1,0 +1,40 @@
+<% layout('/layouts/boilerplate') %>
+<div class="row">
+    <h1 class="text-center"> New Adventure</h1>
+    <div class="col-6 offset-3">
+        <form action="/newAdventures" method="POST" novalidate class="validate-form" enctype="multipart/form-data">
+
+            <!-- Add Title to post -->
+            <div class="mb-3">
+                <label class="form-label" for="title">Title</label>
+                <input class="form-control" type="text" id="title" name="newAdventure[title]" required>
+            </div>
+
+            <!-- Add the location to post -->
+            <div class="mb-3">
+                <label class="form-label" for="title">Location</label>
+                <input class="form-control" type="text" id="location" name="newAdventure[location]" required>
+            </div>
+
+            <!-- Add Images to post -->
+            <div class="mb-3">
+                <label for="formFileMultiple" class="form-label">Add Images</label>
+                <input class="form-control" type="file" name="image" id="formFileMultiple" multiple>
+            </div>
+
+            <!-- Add a description to post -->
+            <div class="mb-3">
+                <label class="form-label" for="title">Description</label>
+                <textarea class="form-control" name="newAdventure[description]" id="description" cols="30" rows="3" required></textarea>
+            </div>
+            
+            <!-- Submit the post -->
+            <div class="mb-3">
+                <button class="btn btn-success">Post Location</button>
+            </div>
+
+            <a href="/newAdventures">All Adventures</a>
+        </form>
+    </div>
+</div>
+

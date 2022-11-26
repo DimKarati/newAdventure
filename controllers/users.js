@@ -32,7 +32,7 @@ module.exports.renderLogin = (req, res) => {
 
 // controller for logging in a user
 module.exports.login = (req, res) => {
-    req.flash('success', 'welcome back!');
+    req.flash('success', 'Welcome back!');
     //Redirects user to the page they were on before they logged in
     const redirectUrl = req.session.returnTo || '/newAdventures';
     delete req.session.returnTo;

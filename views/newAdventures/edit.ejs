@@ -2,23 +2,23 @@
 <div class="row">
     <h1 class="text-center"> Edit Adventure</h1>
     <div class="col-6 offset-3">
-        <form action="/places/<%=place._id%>?_method=PUT" method="POST" novalidate class="validate-form">
+        <form action="/newAdventures/<%=newAdventure._id%>?_method=PUT" method="POST" novalidate class="validate-form">
             <div class="mb-3">
                 <label class="form-label" for="title">Title</label>
-                <input class="form-control" type="text" id="title" name="place[title]" value="<%= place.title %>" required>
+                <input class="form-control" type="text" id="title" name="newAdventure[title]" value="<%= newAdventure.title %>" required>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="title">Location</label>
-                <input class="form-control" type="text" id="location" name="place[location]" value="<%= place.location %>" required>
+                <input class="form-control" type="text" id="location" name="newAdventure[location]" value="<%= newAdventure.location %>" required>
             </div>
-            <!-- <div class="mb-3">
-                <label class="form-label" for="image">Image URL</label>
-                <input class="form-control" type="text" id="location" name="place[image]">
-            </div> -->
+            <div class="mb-3">
+              <label class="form-label" for="title">Description</label>
+              <input class="form-control" type="text" id="location" name="newAdventure[description]" value="<%= newAdventure.description %>" required>
+          </div>
             <div class="mb-3">
                 <button class="btn btn-success">Update Adventure</button>
             </div>
-            <a href="/newAdventures/<% place._id%>">Back to Adventure</a>
+            <a href="/newAdventures/<% newAdventure._id%>">Back to Adventure</a>
         </form>
     </div>
 </div>

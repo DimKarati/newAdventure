@@ -4,7 +4,7 @@ const { validateReview, isLoggedIn, isReviewAuthor } = require('../middleware');
 const catchAsync = require('../utils/catchAsync');
 const ExpressError = require('../utils/ExpressError');
 const reviews = require('../controllers/reviews');
-const Place = require('../models/place');
+const NewAdventure = require('../models/newAdventure');
 const Review = require('../models/review');
 
 // create and post a review to a specific place

@@ -1,3 +1,7 @@
+if (process.env.NODE_ENV !== "production") {
+    require('dotenv').config();
+}
+
 //Different requires, think about it as requiring stuff in C programming, similar concept
 const express = require('express');
 const path = require('path');
@@ -19,7 +23,7 @@ const User = require('./models/user');
 //Require Routing
 const userRoutes = require('./routes/users');
 const newAdventuresRoutes = require('./routes/newAdventures.js');
-const placesRoutes = require('./routes/places.js');
+//const placesRoutes = require('./routes/places.js');
 const reviewsRoutes = require('./routes/reviews');
 
 //Connecting to MongoDB Cluster
@@ -32,7 +36,6 @@ db.once("open", () => {
     console.log("Database connected");
 });
 
-
 //Setting the app to use express
 const app = express();
 app.engine('ejs', ejsMate);
@@ -40,14 +43,14 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 //Parse the body with express
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 //Use method override to be able to use requests like delete and edit
 app.use(methodOverride('_method'));
 //Serve static assets
 app.use(express.static(path.join(__dirname, 'public')))
 //Configuring sessions
 const sessionConfig = {
-    secret: 'thisshouldbeabettersecret!',
+    secret: 'CS321-Fall-2022-Project!',
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -76,14 +79,13 @@ app.use((req, res, next) => {
     next();
 })
 
-//Take the routes for users
+//Use the routes for users
 app.use('/', userRoutes);
-//Take the routes for all the newAdventures
+//Use the routes for all the newAdventures
 app.use('/newAdventures', newAdventuresRoutes);
-//Take the routes for all the places
-app.use('/places', placesRoutes);
-//Take the routes for the reviews
-app.use('/places/:id/reviews', reviewsRoutes);
+//Use the routes for all the reviews
+app.use('/newAdventures/:id/reviews', reviewsRoutes);
+
 
 //This is the home page
 app.get('/', (req, res) => {
@@ -95,10 +97,13 @@ app.get('/register', (req, res) => {
     res.render('register');
 });
 
+//Send an error 404 if any other route is tried to be accessed
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page Not Found', 404))
 })
 
+//In case the server experienced an unexpected condition and was not able to handle the request 
+//send an error message
 app.use((err, req, res, next) => {
     const { status = 500 } = err;
     if (!err.message) err.message = 'Something went wrong!'

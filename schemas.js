@@ -1,12 +1,14 @@
 const Joi = require('joi');
 
-module.exports.adventureSchema = Joi.object({
-    place: Joi.object({
+
+module.exports.NewAdventureSchema = Joi.object({
+    newAdventure: Joi.object({
         title: Joi.string().required(),
         description: Joi.string(),
         location: Joi.string().required()
     }).required()
 });
+
 
 module.exports.reviewSchema = Joi.object({
     review: Joi.object({

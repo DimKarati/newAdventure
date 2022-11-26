@@ -2,9 +2,26 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const Review = require('./review');
 
+const ImageSchema = new Schema({
 
-const NewPlaceSchema = new Schema({
+    url:String,
+    filename: String
+});
+
+ImageSchema.virtual('thumbnail').get(function () {
+    return this.url.replace('/upload', '/upload/w_200');
+});
+
+//const opts = { toJSON: { virtuals: true } };
+
+const NewAdventureSchema = new Schema({
     title: String,
+    images: [
+        {
+            url: String,
+            filename: String
+        }
+    ],
     description: String,
     location: String,
     author: {
@@ -19,7 +36,7 @@ const NewPlaceSchema = new Schema({
     ]
 });
 
-NewPlaceSchema.post('findOneAndDelete', async function (doc) {
+NewAdventureSchema.post('findOneAndDelete', async function (doc) {
     if (doc) {
         await Review.deleteMany({
             _id: {
@@ -29,7 +46,7 @@ NewPlaceSchema.post('findOneAndDelete', async function (doc) {
     }
 })
 
-module.exports = mongoose.model('Place', NewPlaceSchema);
+module.exports = mongoose.model('NewAdventure', NewAdventureSchema);
 
 
 
