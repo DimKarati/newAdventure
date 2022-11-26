@@ -1,7 +1,5 @@
-if (process.env.NODE_ENV !== "production") {
-    require('dotenv').config();
-}
-
+//Require all the libraries
+require('dotenv').config();
 //Different requires, think about it as requiring stuff in C programming, similar concept
 const express = require('express');
 const path = require('path');
