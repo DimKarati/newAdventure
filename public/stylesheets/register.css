@@ -42,7 +42,7 @@ body {
     --color: hsl(var(--primary-dark-hsl), .7);
     background-color: var(--color);
     box-shadow: 0 0 15px 0 var(--color);
-    padding: 50px 100px;
+    padding: 15px 50px;
     width: 100%;
     max-width: 600 px;
     border-radius: 20px;
