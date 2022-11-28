@@ -17,7 +17,7 @@ body {
 
 .d-flex {
     position: relative;
-    background-image: url('https://res.cloudinary.com/dxphgtp1u/image/upload/v1669055032/david-marcu-78A265wPiO4-unsplash_fgmlkl.jpg');
+    background-image: url('https://res.cloudinary.com/dxphgtp1u/image/upload/v1669602434/newAdventure/dino-reichmuth-A5rCN8626Ck-unsplash_l4ordp.jpg');
     background-size: cover;
     background-position: center;
     z-index: 1;
@@ -117,7 +117,7 @@ body {
 }
 
 .register-button {
-    padding: .5em 1em;
+    padding: .1em 1em;
     font-size: 1.5rem;
     font-weight: lighter;
     width: 100%;
